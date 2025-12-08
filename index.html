@@ -1229,12 +1229,14 @@
 
                     data.studyTime[person].push(record);
 
-                    // 保存数据并更新显示
-                    saveData();
-                    renderTasks(person);
+                    // 更新统计图表
                     renderStats();
                     renderChart();
                 }
+
+                // 无论是否输入时间，都要保存任务完成状态
+                saveData();
+                renderTasks(person);
 
                 // 关闭模态框
                 document.getElementById('task-time-modal').style.display = 'none';
