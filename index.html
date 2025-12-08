@@ -13,27 +13,28 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
             min-height: 100vh;
             padding: 20px;
+            padding-bottom: 80px;
         }
 
         .header {
             text-align: center;
-            color: white;
+            color: #5e35b1;
             margin-bottom: 25px;
         }
 
         .header h1 {
             font-size: 2.2em;
             margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             font-weight: 700;
         }
 
         .header p {
             font-size: 1.1em;
-            opacity: 0.95;
+            opacity: 0.85;
             font-weight: 500;
         }
 
@@ -289,6 +290,170 @@
             color: #333;
         }
 
+        /* 聊天框样式 */
+        .chat-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 3px solid #667eea;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .chat-header {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 20px;
+            max-height: 250px;
+            background: #f8f9fa;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-sender {
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .message-sender.nfs {
+            color: #667eea;
+        }
+
+        .message-sender.yzj {
+            color: #764ba2;
+        }
+
+        .message-content {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            word-wrap: break-word;
+            max-width: 80%;
+        }
+
+        .message-content.nfs {
+            align-self: flex-start;
+            border-left: 3px solid #667eea;
+        }
+
+        .message-content.yzj {
+            align-self: flex-end;
+            border-left: 3px solid #764ba2;
+        }
+
+        .message-time {
+            font-size: 0.75em;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .chat-input-area {
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-sender-select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            background: white;
+            min-width: 80px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .chat-send-btn:active {
+            transform: translateY(0);
+        }
+
+        .chat-minimized {
+            max-height: 50px;
+            overflow: hidden;
+        }
+
+        .chat-minimized .chat-messages,
+        .chat-minimized .chat-input-area {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -411,6 +576,25 @@
         </div>
     </div>
 
+    <!-- 聊天框 -->
+    <div id="chat-container" class="chat-container">
+        <div class="chat-header">
+            <span>💬 聊天室</span>
+            <button class="chat-toggle" onclick="toggleChat()">▼</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- 聊天消息将在这里显示 -->
+        </div>
+        <div class="chat-input-area">
+            <select id="chat-sender" class="chat-sender-select">
+                <option value="nfs">nfs📖</option>
+                <option value="yzj">yzj📑</option>
+            </select>
+            <input type="text" id="chat-input" class="chat-input" placeholder="输入消息..." onkeypress="handleChatKeyPress(event)">
+            <button class="chat-send-btn" onclick="sendMessage()">发送</button>
+        </div>
+    </div>
+
     <script>
         // Firebase 配置
         const firebaseConfig = {
@@ -437,7 +621,8 @@
         let currentEditingProgress = null;
         let data = {
             nfs: { exams: [], tasks: [] },
-            yzj: { exams: [], tasks: [] }
+            yzj: { exams: [], tasks: [] },
+            messages: []
         };
 
         // 加载数据
@@ -647,6 +832,81 @@
                 renderExams(person);
                 renderTasks(person);
             });
+            renderChat();
+        }
+
+        // 聊天功能
+        function toggleChat() {
+            const chatContainer = document.getElementById('chat-container');
+            const toggleBtn = chatContainer.querySelector('.chat-toggle');
+            chatContainer.classList.toggle('chat-minimized');
+            toggleBtn.textContent = chatContainer.classList.contains('chat-minimized') ? '▲' : '▼';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const sender = document.getElementById('chat-sender').value;
+            const message = input.value.trim();
+
+            if (message) {
+                const newMessage = {
+                    sender: sender,
+                    text: message,
+                    time: new Date().toISOString()
+                };
+
+                if (!data.messages) {
+                    data.messages = [];
+                }
+
+                data.messages.push(newMessage);
+                input.value = '';
+                saveData();
+
+                if (!database) {
+                    renderChat();
+                }
+
+                // 滚动到底部
+                setTimeout(() => {
+                    const messagesDiv = document.getElementById('chat-messages');
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }, 100);
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '';
+
+            if (!data.messages) {
+                data.messages = [];
+            }
+
+            data.messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message';
+
+                const time = new Date(msg.time);
+                const timeStr = `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
+
+                messageDiv.innerHTML = `
+                    <div class="message-sender ${msg.sender}">${msg.sender === 'nfs' ? 'nfs📖' : 'yzj📑'}</div>
+                    <div class="message-content ${msg.sender}">${msg.text}</div>
+                    <div class="message-time">${timeStr}</div>
+                `;
+
+                container.appendChild(messageDiv);
+            });
+
+            // 滚动到底部
+            container.scrollTop = container.scrollHeight;
         }
 
         // 页面加载时初始化
