@@ -536,6 +536,189 @@
             transform: translateY(0);
         }
 
+        /* 统计模块样式 */
+        .stats-section {
+            max-width: 1400px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stats-header {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats-tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .stats-tab {
+            padding: 10px 25px;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .stats-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stats-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .stats-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card.nfs {
+            border-left: 5px solid #667eea;
+        }
+
+        .stat-card.yzj {
+            border-left: 5px solid #764ba2;
+        }
+
+        .stat-card.winner {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffe8a1 100%);
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+        }
+
+        .stat-card.winner::after {
+            content: '🏆';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2em;
+        }
+
+        .stat-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .stat-name.nfs {
+            color: #667eea;
+        }
+
+        .stat-name.yzj {
+            color: #764ba2;
+        }
+
+        .stat-time {
+            font-size: 3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .time-input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .time-input-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .time-input-header {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .time-input-header.nfs {
+            color: #667eea;
+        }
+
+        .time-input-header.yzj {
+            color: #764ba2;
+        }
+
+        .time-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .time-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        .time-add-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: transform 0.2s;
+        }
+
+        .time-add-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -578,9 +761,19 @@
                 font-size: 16px;
             }
 
+            input[type="date"] {
+                max-width: 100%;
+                font-size: 14px;
+            }
+
             input[type="date"]::-webkit-calendar-picker-indicator {
-                font-size: 1.2em;
+                font-size: 1em;
                 cursor: pointer;
+                padding: 2px;
+            }
+
+            .date-input-wrapper::before {
+                font-size: 0.85em;
             }
 
             .chat-container {
@@ -593,12 +786,32 @@
                 height: 50px;
                 font-size: 1.3em;
             }
+
+            .stats-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .time-input-section {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-time {
+                font-size: 2.5em;
+            }
+
+            .stats-tab {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
         }
     </style>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -657,6 +870,43 @@
                 <input type="text" id="yzj-task-input" class="input-field" placeholder="今日学习任务" style="margin-top: 15px;">
                 <button class="add-btn" onclick="addTask('yzj')">➕ 添加学习项</button>
             </div>
+        </div>
+    </div>
+
+    <!-- 统计模块 -->
+    <div class="stats-section">
+        <div class="stats-header">📊 学习时长统计</div>
+
+        <div class="stats-tabs">
+            <button class="stats-tab active" onclick="switchStatsPeriod('today')">今日</button>
+            <button class="stats-tab" onclick="switchStatsPeriod('week')">本周</button>
+            <button class="stats-tab" onclick="switchStatsPeriod('month')">本月</button>
+        </div>
+
+        <div class="time-input-section">
+            <div class="time-input-card">
+                <div class="time-input-header nfs">nfs📖 记录学习时长</div>
+                <div class="time-input-row">
+                    <input type="number" id="nfs-time-input" class="time-input" placeholder="分钟" min="1">
+                    <button class="time-add-btn" onclick="addStudyTime('nfs')">➕ 添加</button>
+                </div>
+            </div>
+            <div class="time-input-card">
+                <div class="time-input-header yzj">yzj📑 记录学习时长</div>
+                <div class="time-input-row">
+                    <input type="number" id="yzj-time-input" class="time-input" placeholder="分钟" min="1">
+                    <button class="time-add-btn" onclick="addStudyTime('yzj')">➕ 添加</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-comparison" id="stats-comparison">
+            <!-- 统计卡片将在这里显示 -->
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">📈 学习时长趋势</div>
+            <canvas id="studyChart"></canvas>
         </div>
     </div>
 
@@ -721,10 +971,16 @@
         }
 
         let currentEditingProgress = null;
+        let currentStatsPeriod = 'today';
+        let studyChart = null;
         let data = {
             nfs: { exams: [], tasks: [] },
             yzj: { exams: [], tasks: [] },
-            messages: []
+            messages: [],
+            studyTime: {
+                nfs: [],
+                yzj: []
+            }
         };
 
         // 加载数据
@@ -737,9 +993,12 @@
                         data = {
                             nfs: savedData.nfs || { exams: [], tasks: [] },
                             yzj: savedData.yzj || { exams: [], tasks: [] },
-                            messages: savedData.messages || []
+                            messages: savedData.messages || [],
+                            studyTime: savedData.studyTime || { nfs: [], yzj: [] }
                         };
                         renderAll();
+                        renderStats();
+                        renderChart();
                     }
                 });
             } else {
@@ -750,8 +1009,13 @@
                     if (!data.messages) {
                         data.messages = [];
                     }
+                    if (!data.studyTime) {
+                        data.studyTime = { nfs: [], yzj: [] };
+                    }
                 }
                 renderAll();
+                renderStats();
+                renderChart();
             }
             updateCountdowns();
             setInterval(updateCountdowns, 60000); // 每分钟更新一次倒计时
@@ -1015,6 +1279,235 @@
 
             // 滚动到底部
             container.scrollTop = container.scrollHeight;
+        }
+
+        // 统计功能
+        function addStudyTime(person) {
+            const input = document.getElementById(`${person}-time-input`);
+            const minutes = parseInt(input.value);
+
+            if (minutes && minutes > 0) {
+                const record = {
+                    minutes: minutes,
+                    timestamp: new Date().toISOString()
+                };
+
+                if (!data.studyTime) {
+                    data.studyTime = { nfs: [], yzj: [] };
+                }
+
+                data.studyTime[person].push(record);
+                input.value = '';
+                saveData();
+                renderStats();
+                renderChart();
+            }
+        }
+
+        function switchStatsPeriod(period) {
+            currentStatsPeriod = period;
+
+            // 更新标签样式
+            document.querySelectorAll('.stats-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            renderStats();
+            renderChart();
+        }
+
+        function getDateRangeStart(period) {
+            const now = new Date();
+            const start = new Date();
+
+            if (period === 'today') {
+                start.setHours(0, 0, 0, 0);
+            } else if (period === 'week') {
+                const day = now.getDay();
+                const diff = now.getDate() - day + (day === 0 ? -6 : 1); // 周一开始
+                start.setDate(diff);
+                start.setHours(0, 0, 0, 0);
+            } else if (period === 'month') {
+                start.setDate(1);
+                start.setHours(0, 0, 0, 0);
+            }
+
+            return start;
+        }
+
+        function calculateTotalTime(person, period) {
+            if (!data.studyTime || !data.studyTime[person]) {
+                return 0;
+            }
+
+            const startDate = getDateRangeStart(period);
+
+            return data.studyTime[person]
+                .filter(record => new Date(record.timestamp) >= startDate)
+                .reduce((total, record) => total + record.minutes, 0);
+        }
+
+        function formatTime(minutes) {
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+
+            if (hours > 0) {
+                return `${hours}h ${mins}m`;
+            }
+            return `${mins}m`;
+        }
+
+        function renderStats() {
+            const container = document.getElementById('stats-comparison');
+            container.innerHTML = '';
+
+            const nfsTime = calculateTotalTime('nfs', currentStatsPeriod);
+            const yzjTime = calculateTotalTime('yzj', currentStatsPeriod);
+
+            const periodText = currentStatsPeriod === 'today' ? '今日' :
+                             currentStatsPeriod === 'week' ? '本周' : '本月';
+
+            // nfs 卡片
+            const nfsCard = document.createElement('div');
+            nfsCard.className = 'stat-card nfs' + (nfsTime > yzjTime && nfsTime > 0 ? ' winner' : '');
+            nfsCard.innerHTML = `
+                <div class="stat-name nfs">nfs📖</div>
+                <div class="stat-time">${formatTime(nfsTime)}</div>
+                <div class="stat-label">${periodText}学习时长</div>
+            `;
+            container.appendChild(nfsCard);
+
+            // yzj 卡片
+            const yzjCard = document.createElement('div');
+            yzjCard.className = 'stat-card yzj' + (yzjTime > nfsTime && yzjTime > 0 ? ' winner' : '');
+            yzjCard.innerHTML = `
+                <div class="stat-name yzj">yzj📑</div>
+                <div class="stat-time">${formatTime(yzjTime)}</div>
+                <div class="stat-label">${periodText}学习时长</div>
+            `;
+            container.appendChild(yzjCard);
+        }
+
+        function renderChart() {
+            const canvas = document.getElementById('studyChart');
+            const ctx = canvas.getContext('2d');
+
+            if (studyChart) {
+                studyChart.destroy();
+            }
+
+            const labels = [];
+            const nfsData = [];
+            const yzjData = [];
+
+            const startDate = getDateRangeStart(currentStatsPeriod);
+            const now = new Date();
+
+            if (currentStatsPeriod === 'today') {
+                // 按小时统计
+                for (let hour = 0; hour < 24; hour++) {
+                    labels.push(`${hour}:00`);
+                    nfsData.push(0);
+                    yzjData.push(0);
+                }
+
+                if (data.studyTime) {
+                    ['nfs', 'yzj'].forEach(person => {
+                        data.studyTime[person].forEach(record => {
+                            const recordDate = new Date(record.timestamp);
+                            if (recordDate >= startDate) {
+                                const hour = recordDate.getHours();
+                                if (person === 'nfs') {
+                                    nfsData[hour] += record.minutes;
+                                } else {
+                                    yzjData[hour] += record.minutes;
+                                }
+                            }
+                        });
+                    });
+                }
+            } else {
+                // 按天统计
+                const days = currentStatsPeriod === 'week' ? 7 : 30;
+                for (let i = 0; i < days; i++) {
+                    const date = new Date(startDate);
+                    date.setDate(date.getDate() + i);
+                    labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
+                    nfsData.push(0);
+                    yzjData.push(0);
+                }
+
+                if (data.studyTime) {
+                    ['nfs', 'yzj'].forEach(person => {
+                        data.studyTime[person].forEach(record => {
+                            const recordDate = new Date(record.timestamp);
+                            if (recordDate >= startDate && recordDate <= now) {
+                                const dayDiff = Math.floor((recordDate - startDate) / (1000 * 60 * 60 * 24));
+                                if (dayDiff >= 0 && dayDiff < labels.length) {
+                                    if (person === 'nfs') {
+                                        nfsData[dayDiff] += record.minutes;
+                                    } else {
+                                        yzjData[dayDiff] += record.minutes;
+                                    }
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+
+            studyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'nfs📖',
+                            data: nfsData,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'yzj📑',
+                            data: yzjData,
+                            borderColor: '#764ba2',
+                            backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatTime(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatTime(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         // 页面加载时初始化
