@@ -734,7 +734,11 @@
                 database.ref('studyData').on('value', (snapshot) => {
                     const savedData = snapshot.val();
                     if (savedData) {
-                        data = savedData;
+                        data = {
+                            nfs: savedData.nfs || { exams: [], tasks: [] },
+                            yzj: savedData.yzj || { exams: [], tasks: [] },
+                            messages: savedData.messages || []
+                        };
                         renderAll();
                     }
                 });
@@ -743,6 +747,9 @@
                 const saved = localStorage.getItem('studyData');
                 if (saved) {
                     data = JSON.parse(saved);
+                    if (!data.messages) {
+                        data.messages = [];
+                    }
                 }
                 renderAll();
             }
@@ -961,11 +968,12 @@
 
                 data.messages.push(newMessage);
                 input.value = '';
-                saveData();
 
-                if (!database) {
-                    renderChat();
-                }
+                // 立即渲染聊天（不等待Firebase回调）
+                renderChat();
+
+                // 然后保存到Firebase或localStorage
+                saveData();
 
                 // 滚动到底部
                 setTimeout(() => {
