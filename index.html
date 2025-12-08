@@ -804,7 +804,27 @@
             }
 
             .time-input-section {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .time-input-card {
+                padding: 12px;
+            }
+
+            .time-input-header {
+                font-size: 0.9em;
+                margin-bottom: 10px;
+            }
+
+            .time-input {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            .time-add-btn {
+                padding: 8px 12px;
+                font-size: 0.85em;
             }
 
             .stat-time {
@@ -814,6 +834,14 @@
             .stats-tab {
                 padding: 8px 15px;
                 font-size: 0.9em;
+            }
+
+            #studyChart {
+                min-height: 300px;
+            }
+
+            .chart-container {
+                padding: 15px;
             }
         }
     </style>
@@ -935,6 +963,19 @@
         </div>
     </div>
 
+    <!-- 任务完成时间输入模态框 -->
+    <div id="task-time-modal" class="modal">
+        <div class="modal-content">
+            <h3>记录完成时间</h3>
+            <p style="color: #666; margin-bottom: 15px;">完成这个任务花了多少时间？</p>
+            <input type="number" id="task-time-input" class="input-field" placeholder="分钟数" min="1">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-confirm" onclick="saveTaskTime()">确定</button>
+                <button class="modal-btn modal-btn-cancel" onclick="skipTaskTime()">跳过</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 浮动聊天按钮 -->
     <button class="chat-toggle-btn" onclick="toggleChat()">💬</button>
 
@@ -983,6 +1024,7 @@
         }
 
         let currentEditingProgress = null;
+        let currentTaskCompletion = null; // 存储当前完成的任务信息
         let currentStatsPeriod = 'today';
         let studyChart = null;
         let data = {
@@ -1168,6 +1210,53 @@
             currentEditingProgress = null;
         }
 
+        // 保存任务完成时间
+        function saveTaskTime() {
+            if (currentTaskCompletion) {
+                const minutes = parseInt(document.getElementById('task-time-input').value);
+                const { person } = currentTaskCompletion;
+
+                if (minutes && minutes > 0) {
+                    // 添加学习时长记录
+                    const record = {
+                        minutes: minutes,
+                        timestamp: new Date().toISOString()
+                    };
+
+                    if (!data.studyTime) {
+                        data.studyTime = { nfs: [], yzj: [] };
+                    }
+
+                    data.studyTime[person].push(record);
+
+                    // 保存数据并更新显示
+                    saveData();
+                    renderTasks(person);
+                    renderStats();
+                    renderChart();
+                }
+
+                // 关闭模态框
+                document.getElementById('task-time-modal').style.display = 'none';
+                currentTaskCompletion = null;
+            }
+        }
+
+        // 跳过任务时间输入
+        function skipTaskTime() {
+            if (currentTaskCompletion) {
+                const { person } = currentTaskCompletion;
+
+                // 直接保存任务完成状态，不记录时间
+                saveData();
+                renderTasks(person);
+
+                // 关闭模态框
+                document.getElementById('task-time-modal').style.display = 'none';
+                currentTaskCompletion = null;
+            }
+        }
+
         // 添加任务
         function addTask(person) {
             const input = document.getElementById(`${person}-task-input`);
@@ -1184,9 +1273,22 @@
 
         // 切换任务完成状态
         function toggleTask(person, index) {
-            data[person].tasks[index].completed = !data[person].tasks[index].completed;
-            saveData();
-            renderTasks(person);
+            const task = data[person].tasks[index];
+            const wasCompleted = task.completed;
+
+            // 切换完成状态
+            task.completed = !task.completed;
+
+            // 如果从未完成变为完成，弹出时间输入框
+            if (!wasCompleted && task.completed) {
+                currentTaskCompletion = { person, index };
+                document.getElementById('task-time-input').value = '';
+                document.getElementById('task-time-modal').style.display = 'flex';
+            } else {
+                // 如果是取消完成，直接保存
+                saveData();
+                renderTasks(person);
+            }
         }
 
         // 删除任务
