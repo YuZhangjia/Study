@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study with me</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .person-column {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .person-header {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .exam-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #555;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .exam-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .exam-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .exam-date {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .exam-countdown {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #e74c3c;
+        }
+
+        .progress-bar-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 25px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 25px;
+            font-size: 0.9em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .daily-tasks {
+            margin-bottom: 20px;
+        }
+
+        .task-item {
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffc107;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 1em;
+        }
+
+        .task-completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .add-section {
+            margin-top: 20px;
+        }
+
+        .add-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #764ba2;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            min-width: 300px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .modal-btn-confirm {
+            background: #667eea;
+            color: white;
+        }
+
+        .modal-btn-cancel {
+            background: #ccc;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Study with me 📚</h1>
+        <p>完美couple 💕</p>
+    </div>
+
+    <div class="container">
+        <!-- nfs 栏 -->
+        <div class="person-column">
+            <div class="person-header">nfs📖</div>
+
+            <div class="exam-section">
+                <div class="section-title">📋 考试列表</div>
+                <div id="nfs-exams"></div>
+            </div>
+
+            <div class="daily-tasks">
+                <div class="section-title">✨ 今日学习项</div>
+                <div id="nfs-tasks"></div>
+            </div>
+
+            <div class="add-section">
+                <input type="text" id="nfs-exam-name" class="input-field" placeholder="考试名称">
+                <input type="date" id="nfs-exam-date" class="input-field">
+                <button class="add-btn" onclick="addExam('nfs')">➕ 添加考试</button>
+
+                <input type="text" id="nfs-task-input" class="input-field" placeholder="今日学习任务" style="margin-top: 15px;">
+                <button class="add-btn" onclick="addTask('nfs')">➕ 添加学习项</button>
+            </div>
+        </div>
+
+        <!-- yzj 栏 -->
+        <div class="person-column">
+            <div class="person-header">yzj📑</div>
+
+            <div class="exam-section">
+                <div class="section-title">📋 考试列表</div>
+                <div id="yzj-exams"></div>
+            </div>
+
+            <div class="daily-tasks">
+                <div class="section-title">✨ 今日学习项</div>
+                <div id="yzj-tasks"></div>
+            </div>
+
+            <div class="add-section">
+                <input type="text" id="yzj-exam-name" class="input-field" placeholder="考试名称">
+                <input type="date" id="yzj-exam-date" class="input-field">
+                <button class="add-btn" onclick="addExam('yzj')">➕ 添加考试</button>
+
+                <input type="text" id="yzj-task-input" class="input-field" placeholder="今日学习任务" style="margin-top: 15px;">
+                <button class="add-btn" onclick="addTask('yzj')">➕ 添加学习项</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 进度编辑模态框 -->
+    <div id="progress-modal" class="modal">
+        <div class="modal-content">
+            <h3>设置复习进度</h3>
+            <input type="number" id="progress-completed" class="input-field" placeholder="已完成" min="0">
+            <input type="number" id="progress-total" class="input-field" placeholder="总数" min="1">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-confirm" onclick="saveProgress()">确定</button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditingProgress = null;
+        let data = {
+            nfs: { exams: [], tasks: [] },
+            yzj: { exams: [], tasks: [] }
+        };
+
+        // 加载数据
+        function loadData() {
+            const saved = localStorage.getItem('studyData');
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+            renderAll();
+            updateCountdowns();
+            setInterval(updateCountdowns, 60000); // 每分钟更新一次倒计时
+        }
+
+        // 保存数据
+        function saveData() {
+            localStorage.setItem('studyData', JSON.stringify(data));
+        }
+
+        // 计算倒计时
+        function calculateCountdown(examDate) {
+            const now = new Date();
+            const exam = new Date(examDate);
+            const diff = exam - now;
+
+            if (diff < 0) {
+                return '已结束';
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            if (days > 0) {
+                return `还剩 ${days} 天`;
+            } else if (hours > 0) {
+                return `还剩 ${hours} 小时`;
+            } else {
+                return '即将开始';
+            }
+        }
+
+        // 更新所有倒计时
+        function updateCountdowns() {
+            ['nfs', 'yzj'].forEach(person => {
+                data[person].exams.forEach((exam, index) => {
+                    const element = document.querySelector(`#${person}-exams .exam-item:nth-child(${index + 1}) .exam-countdown`);
+                    if (element) {
+                        element.textContent = calculateCountdown(exam.date);
+                    }
+                });
+            });
+        }
+
+        // 添加考试
+        function addExam(person) {
+            const nameInput = document.getElementById(`${person}-exam-name`);
+            const dateInput = document.getElementById(`${person}-exam-date`);
+
+            if (nameInput.value && dateInput.value) {
+                data[person].exams.push({
+                    name: nameInput.value,
+                    date: dateInput.value,
+                    completed: 0,
+                    total: 100
+                });
+
+                nameInput.value = '';
+                dateInput.value = '';
+                saveData();
+                renderExams(person);
+            }
+        }
+
+        // 删除考试
+        function deleteExam(person, index) {
+            data[person].exams.splice(index, 1);
+            saveData();
+            renderExams(person);
+        }
+
+        // 渲染考试列表
+        function renderExams(person) {
+            const container = document.getElementById(`${person}-exams`);
+            container.innerHTML = '';
+
+            data[person].exams.forEach((exam, index) => {
+                const percentage = exam.total > 0 ? (exam.completed / exam.total * 100) : 0;
+                const examDiv = document.createElement('div');
+                examDiv.className = 'exam-item';
+                examDiv.innerHTML = `
+                    <div class="exam-header">
+                        <div>
+                            <span class="exam-name">${exam.name}</span>
+                            <span class="exam-date"> 📅 ${exam.date}</span>
+                        </div>
+                        <div>
+                            <span class="exam-countdown">${calculateCountdown(exam.date)}</span>
+                            <button class="delete-btn" onclick="deleteExam('${person}', ${index})">删除</button>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container" ondblclick="openProgressModal('${person}', ${index})">
+                        <div class="progress-bar" style="width: ${percentage}%"></div>
+                        <div class="progress-text">${exam.completed}/${exam.total} (${Math.round(percentage)}%)</div>
+                    </div>
+                `;
+                container.appendChild(examDiv);
+            });
+        }
+
+        // 打开进度编辑模态框
+        function openProgressModal(person, index) {
+            currentEditingProgress = { person, index };
+            const exam = data[person].exams[index];
+            document.getElementById('progress-completed').value = exam.completed;
+            document.getElementById('progress-total').value = exam.total;
+            document.getElementById('progress-modal').style.display = 'flex';
+        }
+
+        // 保存进度
+        function saveProgress() {
+            if (currentEditingProgress) {
+                const completed = parseInt(document.getElementById('progress-completed').value) || 0;
+                const total = parseInt(document.getElementById('progress-total').value) || 1;
+
+                const { person, index } = currentEditingProgress;
+                data[person].exams[index].completed = completed;
+                data[person].exams[index].total = total;
+
+                saveData();
+                renderExams(person);
+                closeModal();
+            }
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('progress-modal').style.display = 'none';
+            currentEditingProgress = null;
+        }
+
+        // 添加任务
+        function addTask(person) {
+            const input = document.getElementById(`${person}-task-input`);
+            if (input.value) {
+                data[person].tasks.push({
+                    text: input.value,
+                    completed: false
+                });
+                input.value = '';
+                saveData();
+                renderTasks(person);
+            }
+        }
+
+        // 切换任务完成状态
+        function toggleTask(person, index) {
+            data[person].tasks[index].completed = !data[person].tasks[index].completed;
+            saveData();
+            renderTasks(person);
+        }
+
+        // 删除任务
+        function deleteTask(person, index) {
+            data[person].tasks.splice(index, 1);
+            saveData();
+            renderTasks(person);
+        }
+
+        // 渲染任务列表
+        function renderTasks(person) {
+            const container = document.getElementById(`${person}-tasks`);
+            container.innerHTML = '';
+
+            data[person].tasks.forEach((task, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task-item';
+                taskDiv.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}
+                           onchange="toggleTask('${person}', ${index})">
+                    <span class="task-text ${task.completed ? 'task-completed' : ''}">${task.text}</span>
+                    <button class="delete-btn" onclick="deleteTask('${person}', ${index})">删除</button>
+                `;
+                container.appendChild(taskDiv);
+            });
+        }
+
+        // 渲染所有
+        function renderAll() {
+            ['nfs', 'yzj'].forEach(person => {
+                renderExams(person);
+                renderTasks(person);
+            });
+        }
+
+        // 页面加载时初始化
+        window.onload = loadData;
+    </script>
+</body>
+</html>
