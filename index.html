@@ -21,18 +21,20 @@
         .header {
             text-align: center;
             color: white;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .header h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
+            font-size: 2.2em;
+            margin-bottom: 8px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 700;
         }
 
         .header p {
-            font-size: 1.5em;
-            opacity: 0.9;
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-weight: 500;
         }
 
         .container {
@@ -72,10 +74,17 @@
 
         .exam-item {
             background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 16px;
             margin-bottom: 15px;
             border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .exam-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .exam-header {
@@ -139,13 +148,20 @@
 
         .task-item {
             background: #fff3cd;
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 14px;
             margin-bottom: 10px;
             border-left: 4px solid #ffc107;
             display: flex;
             align-items: center;
             gap: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .task-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
         }
 
         .task-checkbox {
@@ -168,14 +184,21 @@
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            font-weight: 500;
+            transition: background 0.3s, transform 0.2s;
         }
 
         .delete-btn:hover {
             background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .delete-btn:active {
+            transform: scale(0.98);
         }
 
         .add-section {
@@ -201,11 +224,23 @@
 
         .input-field {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 5px 0;
             border: 2px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1em;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="date"] {
+            cursor: pointer;
         }
 
         .modal {
@@ -255,8 +290,50 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
             .container {
                 flex-direction: column;
+                gap: 15px;
+            }
+
+            .person-column {
+                padding: 20px;
+            }
+
+            .person-header {
+                font-size: 1.6em;
+            }
+
+            .exam-name {
+                font-size: 1em;
+            }
+
+            .exam-date {
+                font-size: 0.85em;
+            }
+
+            .exam-countdown {
+                font-size: 0.95em;
+            }
+
+            .input-field {
+                font-size: 16px;
+            }
+
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                font-size: 1.2em;
+                cursor: pointer;
             }
         }
     </style>
