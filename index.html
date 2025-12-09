@@ -1110,6 +1110,14 @@
             const dateInput = document.getElementById(`${person}-exam-date`);
 
             if (nameInput.value && dateInput.value) {
+                // 确保数据结构存在
+                if (!data[person]) {
+                    data[person] = { exams: [], tasks: [] };
+                }
+                if (!data[person].exams) {
+                    data[person].exams = [];
+                }
+
                 data[person].exams.push({
                     name: nameInput.value,
                     date: dateInput.value,
@@ -1135,6 +1143,14 @@
         function renderExams(person) {
             const container = document.getElementById(`${person}-exams`);
             container.innerHTML = '';
+
+            // 确保数据结构存在
+            if (!data[person]) {
+                data[person] = { exams: [], tasks: [] };
+            }
+            if (!data[person].exams) {
+                data[person].exams = [];
+            }
 
             data[person].exams.forEach((exam, index) => {
                 const percentage = exam.total > 0 ? (exam.completed / exam.total * 100) : 0;
@@ -1244,6 +1260,14 @@
         function addTask(person) {
             const input = document.getElementById(`${person}-task-input`);
             if (input.value) {
+                // 确保数据结构存在
+                if (!data[person]) {
+                    data[person] = { exams: [], tasks: [] };
+                }
+                if (!data[person].tasks) {
+                    data[person].tasks = [];
+                }
+
                 data[person].tasks.push({
                     text: input.value,
                     completed: false
@@ -1285,6 +1309,14 @@
         function renderTasks(person) {
             const container = document.getElementById(`${person}-tasks`);
             container.innerHTML = '';
+
+            // 确保数据结构存在
+            if (!data[person]) {
+                data[person] = { exams: [], tasks: [] };
+            }
+            if (!data[person].tasks) {
+                data[person].tasks = [];
+            }
 
             data[person].tasks.forEach((task, index) => {
                 const taskDiv = document.createElement('div');
