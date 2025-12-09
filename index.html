@@ -1521,6 +1521,9 @@
                 if (!data.studyTime) {
                     data.studyTime = { nfs: [], yzj: [] };
                 }
+                if (!data.studyTime[person]) {
+                    data.studyTime[person] = [];
+                }
 
                 data.studyTime[person].push(record);
                 input.value = '';
