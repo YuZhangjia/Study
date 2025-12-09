@@ -105,6 +105,20 @@
             font-size: 0.95em;
         }
 
+        .edit-icon-btn {
+            background: none;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .edit-icon-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
         .exam-countdown {
             font-weight: bold;
             font-size: 1.1em;
@@ -953,6 +967,22 @@
         </div>
     </div>
 
+    <!-- 考试编辑模态框 -->
+    <div id="exam-edit-modal" class="modal">
+        <div class="modal-content">
+            <h3>编辑考试</h3>
+            <input type="text" id="edit-exam-name" class="input-field" placeholder="考试名称">
+            <div class="date-input-wrapper">
+                <input type="datetime-local" id="edit-exam-date" class="input-field">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-confirm" onclick="saveExamEdit()">保存</button>
+                <button class="modal-btn" style="background: #e74c3c; color: white;" onclick="confirmDeleteExam()">删除</button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeExamEditModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 任务完成时间输入模态框 -->
     <div id="task-time-modal" class="modal">
         <div class="modal-content">
@@ -1014,6 +1044,7 @@
         }
 
         let currentEditingProgress = null;
+        let currentEditingExam = null; // 存储当前编辑的考试信息
         let currentTaskCompletion = null; // 存储当前完成的任务信息
         let currentStatsPeriod = 'today';
         let studyChart = null;
@@ -1149,6 +1180,48 @@
             renderExams(person);
         }
 
+        // 打开考试编辑模态框
+        function openExamEditModal(person, index) {
+            currentEditingExam = { person, index };
+            const exam = data[person].exams[index];
+            document.getElementById('edit-exam-name').value = exam.name;
+            document.getElementById('edit-exam-date').value = exam.date;
+            document.getElementById('exam-edit-modal').style.display = 'flex';
+        }
+
+        // 关闭考试编辑模态框
+        function closeExamEditModal() {
+            document.getElementById('exam-edit-modal').style.display = 'none';
+            currentEditingExam = null;
+        }
+
+        // 保存考试编辑
+        function saveExamEdit() {
+            if (currentEditingExam) {
+                const name = document.getElementById('edit-exam-name').value;
+                const date = document.getElementById('edit-exam-date').value;
+
+                if (name && date) {
+                    const { person, index } = currentEditingExam;
+                    data[person].exams[index].name = name;
+                    data[person].exams[index].date = date;
+
+                    saveData();
+                    renderExams(person);
+                    closeExamEditModal();
+                }
+            }
+        }
+
+        // 从编辑模态框中删除考试
+        function confirmDeleteExam() {
+            if (currentEditingExam && confirm('确定要删除这个考试吗？')) {
+                const { person, index } = currentEditingExam;
+                deleteExam(person, index);
+                closeExamEditModal();
+            }
+        }
+
         // 渲染考试列表
         function renderExams(person) {
             const container = document.getElementById(`${person}-exams`);
@@ -1168,13 +1241,15 @@
                 examDiv.className = 'exam-item';
                 examDiv.innerHTML = `
                     <div class="exam-header">
-                        <div>
-                            <span class="exam-name">${exam.name}</span>
-                            <span class="exam-date"> 📅 ${exam.date}</span>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                                <span class="exam-name">${exam.name}</span>
+                                <button class="edit-icon-btn" onclick="openExamEditModal('${person}', ${index})" title="编辑考试">⚙️</button>
+                            </div>
+                            <div class="exam-date">📅 ${exam.date}</div>
                         </div>
                         <div>
                             <span class="exam-countdown">${calculateCountdown(exam.date)}</span>
-                            <button class="delete-btn" onclick="deleteExam('${person}', ${index})">删除</button>
                         </div>
                     </div>
                     <div class="progress-bar-container" ondblclick="openProgressModal('${person}', ${index})">
