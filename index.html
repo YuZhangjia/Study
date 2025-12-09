@@ -1069,18 +1069,6 @@
 
         // 加载数据
         function loadData() {
-            // 临时清零学习时长数据
-            if (database) {
-                database.ref('studyData/studyTime').set({ nfs: [], yzj: [] });
-            } else {
-                const saved = localStorage.getItem('studyData');
-                if (saved) {
-                    const tempData = JSON.parse(saved);
-                    tempData.studyTime = { nfs: [], yzj: [] };
-                    localStorage.setItem('studyData', JSON.stringify(tempData));
-                }
-            }
-
             if (database) {
                 // 使用 Firebase 实时同步
                 database.ref('studyData').on('value', (snapshot) => {
